@@ -17,8 +17,8 @@ classdef Software
         % type 3: Allocator SW
         % type 4: Status check SW
         % type 5: Data acquisiton SW
-        % type 6: Switch SW (run on Switch HW)
-        % type 7: Communication SW (run on AFDX link HW)
+        % type 6: LRU SW
+        % type 7: Switch SW
         software_type;
     end
     

@@ -1,10 +1,3 @@
-disp('Calculate weights...')
-W = [];
-for i = 1:N_softwares_symm
-    w = get_task_weights(softwares{i,1}.required_IO, location_topology, N_locations_symm, IO_location_symm);
-    W = [W; w'];
-end
-
 %%
 disp('Start CVX formulation...')
 tic
@@ -12,29 +5,29 @@ tic
 % cvx_solver_settings( 'MIPGap', 0.5/100 );
 cvx_begin    
     % X_sw2hw(i,j) = 1 means SW i is allocated to HW j
-    variable X_sw2hw(N_softwares_symm, N_hardwares_symm) binary
+    variable X_sw2hw(N_softwares, N_hardwares) binary
     
     % X_hw2l(i,j) = 1 means HW i is allocated to location j
-    variable X_hw2l(N_hardwares_symm, N_locations_symm) binary
+    variable X_hw2l(N_hardwares, N_locations) binary
     
     % X_sw2l(i,j) = 1 means SW i is allocated to location j
-    variable X_sw2l(N_softwares_symm, N_locations_symm) binary
-    variable X_sw2l_aux(N_softwares_symm, N_locations_symm, N_hardwares_symm) binary
+    variable X_sw2l(N_softwares, N_locations) binary
+    variable X_sw2l_aux(N_softwares, N_locations, N_hardwares) binary
     
     % X_hw(i) = 1 means HW i is used
-    variable X_hw(N_hardwares_symm) binary;
+    variable X_hw(N_hardwares) binary;
     
     % sum of memory on all software that run on a HW
-    expression softwares_required_memory(N_hardwares_symm)
+    expression softwares_required_memory(N_hardwares)
     
     % sum of IO on all software that run on a HW
-    expression softwares_required_IO(N_hardwares_symm)
+    expression softwares_required_IO(N_hardwares)
     
     % sum of bandwidth on all software that run on a HW
-    expression softwares_required_bandwidth(N_hardwares_symm)
+    expression softwares_required_bandwidth(N_hardwares)
     
     % sum of area on all HW that placed on a location
-    expression hardwares_required_area(N_locations_symm)
+    expression hardwares_required_area(N_locations)
     
 %     minimize( sum(X_hw([CRDC_A_ind CRDC_B_ind])) + ...
 %               avg_abs_dev(sum(X_sw2hw(Avionics_H_app_ind, CPIOM_H_ind))) + ...
@@ -51,8 +44,8 @@ cvx_begin
         sum(X_sw2hw(Avionics_J_app_ind, CPIOM_J_ind)) >= 2;
         
         % allocation type constraint
-        for i = 1:N_softwares_symm
-            for j = 1:N_hardwares_symm
+        for i = 1:N_softwares
+            for j = 1:N_hardwares
                 
                 % Avionics-H can be allocated to CPIOM-H only
                 if softwares{i,1}.software_type == 1
@@ -92,8 +85,8 @@ cvx_begin
             end
         end
         
-        for i = 1:N_hardwares_symm
-            for j = 1:N_locations_symm
+        for i = 1:N_hardwares
+            for j = 1:N_locations
                 
                 % CPIOM can be installed at Avionics Compartment only
                 if hardwares{i,1}.hardware_type == 1
@@ -134,8 +127,8 @@ cvx_begin
         sum(X_sw2hw(Allocator_app_ind, CPIOM_J_ind)) <= 1;
         
         % HW usages
-        for i = 1:N_hardwares_symm
-            for j = 1:N_softwares_symm
+        for i = 1:N_hardwares
+            for j = 1:N_softwares
                 X_hw(i) >= X_sw2hw(j,i);
             end
         end        
@@ -143,8 +136,8 @@ cvx_begin
         X_hw(CPIOM_J_ind) == 1; % All CPIOM-J must be used
         
         % resource constraint
-        for i = 1:N_hardwares_symm
-            for j = 1:N_softwares_symm
+        for i = 1:N_hardwares
+            for j = 1:N_softwares
                 softwares_required_memory(i) = softwares_required_memory(i) + ...
                     softwares{j,1}.required_memory*X_sw2hw(j,i);
                 
@@ -159,8 +152,8 @@ cvx_begin
             softwares_required_bandwidth(i) <= hardwares{i,1}.available_bandwidth;
         end
         
-        for i = 1:N_locations_symm
-            for j = 1:N_hardwares_symm
+        for i = 1:N_locations
+            for j = 1:N_hardwares
                 hardwares_required_area(i) = hardwares_required_area(i) + ...
                     hardwares{j,1}.required_area*X_hw2l(j,i);
             end
@@ -168,9 +161,9 @@ cvx_begin
         end
         
         % linearization of X_sw2l = Xsw2hw*Xhw2l
-        for i = 1:N_softwares_symm
-            for j = 1:N_locations_symm 
-                for k = 1:N_hardwares_symm
+        for i = 1:N_softwares
+            for j = 1:N_locations 
+                for k = 1:N_hardwares
                     X_sw2l_aux(i,j,k) <= X_sw2hw(i,k);
                     X_sw2l_aux(i,j,k) <= X_hw2l(k,j);
                     X_sw2l_aux(i,j,k) >= X_sw2hw(i,k) + X_hw2l(k,j) - 1;

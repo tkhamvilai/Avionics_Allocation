@@ -13,10 +13,10 @@ classdef Hardware
         redundancy_type;
         % type 1: CPIOM-H
         % type 2: CPIOM-J
-        % type 3: Switch
-        % type 4: CRDC-A
-        % type 5: CRDC-B
-        % type 6: AFDX link
+        % type 3: CRDC-A
+        % type 4: CRDC-B
+        % type 5: LRU
+        % type 6: Switches
         hardware_type;
     end
     

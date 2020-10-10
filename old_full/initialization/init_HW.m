@@ -1,9 +1,7 @@
-N_hardwares_per_type_symm = N_hardwares_per_type/2;
-N_hardwares_symm = N_hardwares/2;
-hardwares = cell(N_hardwares_symm,1); % for symmetry
+hardwares = cell(N_hardwares,1); % for symmetry
 
 for i = 1:N_hardware_types
-    for j = 1:N_hardwares_per_type_symm(i)
+    for j = 1:N_hardwares_per_type(i)
         if i == 1 % CPIOM-H HW type
             hardware_available_resources.memory = 200; % Each CRDC HW can hold up to this number of memories
             hardware_available_resources.IO = 0; % Each CRDC HW can hold up to this number of IOs
@@ -23,7 +21,7 @@ for i = 1:N_hardware_types
             hardware_redundancy_type = 0;
             hardware_type = i;
             
-            hardwares{sum(N_hardwares_per_type_symm(1:i-1)) + j} = ...
+            hardwares{sum(N_hardwares_per_type(1:i-1)) + j} = ...
                Hardware(hardware_available_resources, hardware_required_resources, hardware_redundancy_type, hardware_type);            
         
         elseif i == 3 % Switch HW type
@@ -34,7 +32,7 @@ for i = 1:N_hardware_types
             hardware_redundancy_type = 1;
             hardware_type = i;
 
-            hardwares{sum(N_hardwares_per_type_symm(1:i-1)) + j} = ...
+            hardwares{sum(N_hardwares_per_type(1:i-1)) + j} = ...
                Hardware(hardware_available_resources, hardware_required_resources, hardware_redundancy_type, hardware_type);
         
         elseif i == 4 % CRDC-A HW type
@@ -45,7 +43,7 @@ for i = 1:N_hardware_types
             hardware_redundancy_type = 0;
             hardware_type = i;
 
-            hardwares{sum(N_hardwares_per_type_symm(1:i-1)) + j} = ...
+            hardwares{sum(N_hardwares_per_type(1:i-1)) + j} = ...
                Hardware(hardware_available_resources, hardware_required_resources, hardware_redundancy_type, hardware_type);   
         
         elseif i == 5 % CRDC-B HW type
@@ -56,7 +54,7 @@ for i = 1:N_hardware_types
             hardware_redundancy_type = 0;
             hardware_type = i;
 
-            hardwares{sum(N_hardwares_per_type_symm(1:i-1)) + j} = ...
+            hardwares{sum(N_hardwares_per_type(1:i-1)) + j} = ...
                Hardware(hardware_available_resources, hardware_required_resources, hardware_redundancy_type, hardware_type);   
         
         elseif i == 6 % Communication SW type

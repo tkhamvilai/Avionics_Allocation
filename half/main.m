@@ -7,6 +7,7 @@ addpath components initialization helpers
 
 %% Initialization
 init_main;
+% load init_data.mat
 disp('Initialization Successful')
 
 %% Problem Formulation

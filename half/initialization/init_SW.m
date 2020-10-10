@@ -2,14 +2,21 @@ N_softwares_per_type_symm = N_softwares_per_type/2;
 N_softwares_symm = N_softwares/2;
 softwares = cell(N_softwares_symm, 1);
 
+SW_Avionics_H = 1;
+SW_Avionics_J = 2;
+SW_Allocator = 3;
+SW_Status_check = 4;
+SW_Data_acquisition = 5;
+SW_Switch = 6;
+
+
 % Allocate IO for Data acquisiton SW
-Data_acquisiton_SW_ind = 5;
 % cvx_solver Gurobi_2
 cvx_begin quiet
-variable X_IO_SW(N_IO_symm, N_softwares_per_type_symm(Data_acquisiton_SW_ind)) binary
+variable X_IO_SW(N_IO_symm, N_softwares_per_type_symm(SW_Data_acquisition)) binary
 subject to
     sum(X_IO_SW, 2) == 1; % each IO must be allocated
-    for i = 1:N_softwares_per_type_symm(Data_acquisiton_SW_ind)
+    for i = 1:N_softwares_per_type_symm(SW_Data_acquisition)
         sum(X_IO_SW(:,i)) >= 1;
     end
 cvx_end
@@ -78,9 +85,6 @@ for i = 1:N_software_types
 
            softwares{sum(N_softwares_per_type_symm(1:i-1)) + j} = ...
                Software(software_required_resources, software_redundancy_type, software_type);
-           
-        elseif i == 7 % Communication SW type
-            % not used right now
         end
     end
 end
