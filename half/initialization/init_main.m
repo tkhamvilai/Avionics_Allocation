@@ -1,48 +1,59 @@
 % always assume symmetry
 rng(0); % reset random seed
 
-N_IO_location = 24;
-N_install_locations = 12;
-N_Avionics_Compartment = 2; % main avionics compartment
-N_location_types = 2; % N_IO_location and N_Avionics_Compartment
-N_locations_per_type = [N_install_locations, N_Avionics_Compartment];
-N_locations = sum(N_locations_per_type);
-
 disp('Initializing IO...')
+N_IO_location = 22;
 init_IO;
-disp('Initializing topology...')
-init_topology;
-disp('Initializing IO location symm...')
-init_IO_location_symm; % symmetry only, for now
-
-N_hardware_types = 6; % comply with Hardware.m
-N_hardwares_per_type = [12, ... % CPIOM-H
-                        10, ... % CPIOM-J
-                       7*2, ... % Switch
-                       8*2, ... % CRDC-A
-                       7*2, ... % CRDC-B
-                      11*2]; % AFDX link
-N_hardwares = sum(N_hardwares_per_type);
-
-N_software_types = 6; % comply with Software.m
-N_softwares_per_type = [16*2, ... % Avionics-H
-                        11*2, ... % Avionics-J
-                          12, ... % Allocator (3 on each CPIOM type for both sides)
-                        sum(N_hardwares_per_type(1,1:2)), ... % Status check
-                        1196, ... % Data acquisiton
-                         7*2]; % Switch
-N_softwares = sum(N_softwares_per_type);
 
 disp('Initializing locations...')
+N_location_types = 4; % comply with Location.m
+N_locations_per_type = [1; % CPIOM install location
+                        9; % CRDC install location
+                        0*1; % LRU install location
+                        0*7]; % Switch install location
+N_locations = sum(N_locations_per_type);
 init_location;
+
+disp('Initializing topology...')
+init_topology;
+
+disp('Initializing IO location...')
+init_IO_location;
+
 disp('Initializing hardwares...')
+N_hardware_types = 6; % comply with Hardware.m
+N_hardwares_per_type = [12, ... % CPIOM-H
+                        10, ... % CPIOM-J                         
+                        15, ... % CRDC-A
+                        14, ... % CRDC-B
+                        0*55, ... % LRU
+                        0*N_locations_per_type(location_Switch)]; % Switch
+N_hardwares = sum(N_hardwares_per_type);
 init_HW;
+
 disp('Initializing softwares...')
+N_software_types = 7; % comply with Software.m
+N_softwares_per_type = [16*2, ... % Avionics-H *2 for sw redandancy
+                        11*2, ... % Avionics-J *2 for sw redandancy
+                        3*2, ... % Allocator (3 for each CPIOM type)
+                        sum(N_hardwares_per_type(1,[HW_CPIOM_H HW_CPIOM_J])), ... % Status check on CPIOM
+                        100, ...  % Data acquisiton
+                        0*N_hardwares_per_type(HW_LRU), ... % LRU sw
+                        0*N_hardwares_per_type(HW_Switch)]; % Switch sw
+N_softwares = sum(N_softwares_per_type);
 init_SW;
 
 disp('Initializing indices...')
-init_indices_symm
+init_indices
+
+disp('Initializing AFDX...')
+N_switches = 7;
+N_links = 11;
+N_LRUs = 55;
+init_AFDX
+
 disp('Initializing resources...')
-init_resources_symm
+init_resources
+
 disp('Initializing weights...')
 init_weights

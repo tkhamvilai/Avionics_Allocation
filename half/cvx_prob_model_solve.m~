@@ -21,11 +21,11 @@ cvx_begin
 %     variable X_ptl(N_hardwares_per_type(HW_AFDX_link), N_softwares_per_type(SW_Avionics_H)+N_softwares_per_type(SW_Avionics_J)+N_softwares_per_type(SW_Allocator)+N_softwares_per_type(SW_Status_check), N_softwares_per_type(SW_Data_acquisition)) binary
 %     expression Y(N_hardwares_per_type(HW_AFDX_link), N_softwares_per_type(SW_Avionics_H)+N_softwares_per_type(SW_Avionics_J)+N_softwares_per_type(SW_Allocator)+N_softwares_per_type(SW_Status_check), N_softwares_per_type(SW_Data_acquisition))
  
-%     minimize( sum(X_hw([HW_CRDC_A_ind HW_CRDC_B_ind])) + ...
+%     minimize( sum(X_hw([HW_CRDC_A_ind CRDC_B_ind])) + ...
 %               avg_abs_dev(sum(X_sw2hw(SW_Avionics_H_ind, HW_CPIOM_H_ind))) + ...
 %               avg_abs_dev(sum(X_sw2hw(SW_Avionics_J_ind, HW_CPIOM_J_ind))) + ...
 %               sum(sum(W.*X_sw2l)) )
-    minimize( sum(X_hw) + sum(sum(W_sw2l.*X_sw2l)) )
+    minimize( sum(X_hw) + sum(sum(W.*X_sw2l)) )
     subject to
         % allocation constraint
         sum(X_sw2hw,2) == 1; % every SW must be allocated to a HW
@@ -40,12 +40,12 @@ cvx_begin
         X_sw2hw(SW_Avionics_J_ind, setdiff(hw_ind,HW_CPIOM_J_ind)) == zeros(size(X_sw2hw(SW_Avionics_J_ind, setdiff(hw_ind,HW_CPIOM_J_ind))));
         X_sw2hw(SW_Allocator_ind, setdiff(hw_ind,[HW_CPIOM_H_ind HW_CPIOM_J_ind])) == zeros(size(X_sw2hw(SW_Allocator_ind, setdiff(hw_ind,[HW_CPIOM_H_ind HW_CPIOM_J_ind]))));
         X_sw2hw(SW_Status_Check_ind, setdiff(hw_ind,[HW_CPIOM_H_ind HW_CPIOM_J_ind])) == zeros(size(X_sw2hw(SW_Status_Check_ind, setdiff(hw_ind,[HW_CPIOM_H_ind HW_CPIOM_J_ind]))));
-        X_sw2hw(SW_Data_Acquisition_ind, setdiff(hw_ind,[HW_CRDC_A_ind HW_CRDC_B_ind])) == zeros(size(X_sw2hw(SW_Data_Acquisition_ind, setdiff(hw_ind,[HW_CRDC_A_ind HW_CRDC_B_ind]))));
+        X_sw2hw(Data_Acquisiton_ind, setdiff(hw_ind,[HW_CRDC_A_ind CRDC_B_ind])) == zeros(size(X_sw2hw(Data_Acquisiton_ind, setdiff(hw_ind,[HW_CRDC_A_ind CRDC_B_ind]))));
 %         X_sw2hw(Switch_app_ind, setdiff(hw_ind,Switch_ind)) == zeros(size(X_sw2hw(Switch_app_ind, setdiff(hw_ind,Switch_ind))));
         
         X_hw2l(HW_CPIOM_H_ind, setdiff(location_ind,location_CPIOM_ind)) == zeros(size(X_hw2l(HW_CPIOM_H_ind, setdiff(location_ind,location_CPIOM_ind))));
         X_hw2l(HW_CPIOM_J_ind, setdiff(location_ind,location_CPIOM_ind)) == zeros(size(X_hw2l(HW_CPIOM_J_ind, setdiff(location_ind,location_CPIOM_ind))));
-        X_hw2l([HW_CRDC_A_ind HW_CRDC_B_ind], setdiff(location_ind,location_CRDC_ind)) == zeros(size(X_hw2l([HW_CRDC_A_ind HW_CRDC_B_ind], setdiff(location_ind,location_CRDC_ind))));       
+        X_hw2l([HW_CRDC_A_ind CRDC_B_ind], setdiff(location_ind,location_CRDC_ind)) == zeros(size(X_hw2l([HW_CRDC_A_ind CRDC_B_ind], setdiff(location_ind,location_CRDC_ind))));       
         
         % segregation constraint 
         % TODO: based on redundancy type

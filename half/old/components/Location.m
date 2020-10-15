@@ -4,10 +4,8 @@ classdef Location
     
     properties
         available_area;
-        % type 1: CPIOM installation location (Avionics Compartment)
-        % type 2: CRDC installation location
-        % type 3: LRU installation location
-        % type 4: Switch installation location
+        % type 1: CRDC installation location
+        % type 2: CPIOM installation location (Avionics Compartment)
         location_type;
     end
     
