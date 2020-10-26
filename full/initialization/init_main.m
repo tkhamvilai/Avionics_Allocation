@@ -37,7 +37,7 @@ N_softwares_per_type = [16*2, ... % Avionics-H *2 for sw redandancy
                         11*2, ... % Avionics-J *2 for sw redandancy
                         3*2, ... % Allocator (3 for each CPIOM type)
                         sum(N_hardwares_per_type(1,[HW_CPIOM_H HW_CPIOM_J])), ... % Status check on CPIOM
-                        100, ...  % Data acquisiton
+                        600, ...  % Data acquisiton
                         0*N_hardwares_per_type(HW_LRU), ... % LRU sw
                         0*N_hardwares_per_type(HW_Switch)]; % Switch sw
 N_softwares = sum(N_softwares_per_type);
