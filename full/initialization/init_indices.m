@@ -4,8 +4,10 @@ location_ind = 1:N_locations;
 
 SW_Avionics_H_ind = [];
 SW_Avionics_J_ind = [];
-SW_Allocator_ind = [];
-SW_Status_Check_ind = [];
+SW_Allocator_H_ind = [];
+SW_Allocator_J_ind = [];
+SW_Status_Check_H_ind = [];
+SW_Status_Check_J_ind = [];
 SW_Data_Acquisition_ind = [];
 SW_LRU_ind = [];
 SW_Switch_ind = [];
@@ -14,10 +16,14 @@ for i = 1:N_softwares
         SW_Avionics_H_ind = [SW_Avionics_H_ind i];
     elseif softwares{i,1}.software_type == SW_Avionics_J % Avionics-J
         SW_Avionics_J_ind = [SW_Avionics_J_ind i];
-    elseif softwares{i,1}.software_type == SW_Allocator % Allocator
-        SW_Allocator_ind = [SW_Allocator_ind i];
-    elseif softwares{i,1}.software_type == SW_Status_check % Status check
-        SW_Status_Check_ind = [SW_Status_Check_ind i];
+    elseif softwares{i,1}.software_type == SW_Allocator_H % Allocator H
+        SW_Allocator_H_ind = [SW_Allocator_H_ind i];
+    elseif softwares{i,1}.software_type == SW_Allocator_J % Allocator J
+        SW_Allocator_J_ind = [SW_Allocator_J_ind i];
+    elseif softwares{i,1}.software_type == SW_Status_check_H % Status check H
+        SW_Status_Check_H_ind = [SW_Status_Check_H_ind i];
+    elseif softwares{i,1}.software_type == SW_Status_check_J % Status check J
+        SW_Status_Check_J_ind = [SW_Status_Check_J_ind i];
     elseif softwares{i,1}.software_type == SW_Data_acquisition % Data acquisiton
         SW_Data_Acquisition_ind = [SW_Data_Acquisition_ind i];
     elseif softwares{i,1}.software_type == SW_LRU % LRU

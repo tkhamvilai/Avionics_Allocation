@@ -14,11 +14,13 @@ classdef Software
         redundancy_type;
         % type 1: Avionics-H SW
         % type 2: Avionics-J SW
-        % type 3: Allocator SW
-        % type 4: Status check SW
+        % type 3: Allocator-H SW
+        % type 4: Allocator-J SW
+        % type 5: Status check-H SW
+        % type 6: Status check-J SW
         % type 5: Data acquisiton SW
-        % type 6: LRU SW
-        % type 7: Switch SW
+        % type 7: LRU SW
+        % type 8: Switch SW
         software_type;
     end
     

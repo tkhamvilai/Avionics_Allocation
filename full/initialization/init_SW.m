@@ -2,11 +2,13 @@ softwares = cell(N_softwares, 1);
 
 SW_Avionics_H = 1;
 SW_Avionics_J = 2;
-SW_Allocator = 3;
-SW_Status_check = 4;
-SW_Data_acquisition = 5;
-SW_LRU = 6;
-SW_Switch = 7;
+SW_Allocator_H = 3;
+SW_Allocator_J = 4;
+SW_Status_check_H = 5;
+SW_Status_check_J = 6;
+SW_Data_acquisition = 7;
+SW_LRU = 8;
+SW_Switch = 9;
 
 % Allocate IO for Data acquisition SW
 % cvx_solver Gurobi_2
@@ -42,7 +44,17 @@ for i = 1:N_software_types
            softwares{sum(N_softwares_per_type(1:i-1)) + j} = ...
                Software(software_required_resources, software_redundancy_type, software_type);
            
-        elseif i == SW_Allocator % Allocator SW type
+        elseif i == SW_Allocator_H % Allocator SW type
+           software_required_resources.memory = 5;
+           software_required_resources.IO = [];
+           software_required_resources.bandwidth = 5;
+           software_redundancy_type = 1;
+           software_type = i;
+
+           softwares{sum(N_softwares_per_type(1:i-1)) + j} = ...
+               Software(software_required_resources, software_redundancy_type, software_type);
+           
+        elseif i == SW_Allocator_J % Allocator SW type
            software_required_resources.memory = 5;
            software_required_resources.IO = [];
            software_required_resources.bandwidth = 5;
@@ -52,7 +64,17 @@ for i = 1:N_software_types
            softwares{sum(N_softwares_per_type(1:i-1)) + j} = ...
                Software(software_required_resources, software_redundancy_type, software_type);
             
-        elseif i == SW_Status_check % Status check SW type
+        elseif i == SW_Status_check_H % Status check SW type
+           software_required_resources.memory = 2;
+           software_required_resources.IO = [];
+           software_required_resources.bandwidth = 2;
+           software_redundancy_type = 1;
+           software_type = i;
+
+           softwares{sum(N_softwares_per_type(1:i-1)) + j} = ...
+               Software(software_required_resources, software_redundancy_type, software_type);
+           
+        elseif i == SW_Status_check_J % Status check SW type
            software_required_resources.memory = 2;
            software_required_resources.IO = [];
            software_required_resources.bandwidth = 2;
