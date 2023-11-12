@@ -16,7 +16,7 @@ assert(length(sw_redundancy) == N_sw);
 hw_redundancy = [3 3 2 2]; % the number of copies for each unqiue hardware
 assert(length(hw_redundancy) == N_hw);
 
-% This A1 matrix determines which software can be run on which hardware
+% This A1 matrix determines which unqiue software can be run on which unqiue hardware
 A1 = [1 1 1 1;
       1 1 1 0;
       1 1 0 0];
