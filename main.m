@@ -61,8 +61,8 @@ B3 = B1*B2';
 
 % TODO: implement scheduling constraints
 % TODO: implement topology, bandwidth, and communication constraints
-% TODO: implement fault constraints
-% TODO: implement security constraints
+% TODO: implement security constraints (out one odd on sw, then look at which hw executing that sw (using previous allocation result), then isolate that hw, already done in a separate file, need to put it here too.)
+% TODO: implement fault constraints (kind of the same as security, but measure directly from hw not sw, then immediately isolate that hw, doesn't need a result from previous allocation)
 
 % software priority coefficient vector
 alpha = ones(N_sw_tot,1);
